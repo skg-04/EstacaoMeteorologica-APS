@@ -1,0 +1,4 @@
+com\suaestacao\web\EstacaoMeteorologicaWebApplication.class
+com\suaestacao\dao\DadoClimaticoDAO.class
+com\suaestacao\controle\ClimaControle.class
+com\suaestacao\modelo\DadoClimatico.class

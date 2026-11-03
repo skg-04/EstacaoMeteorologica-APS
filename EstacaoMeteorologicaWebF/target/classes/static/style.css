@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap'); /* Força a importação da fonte Poppins diretamente pelo CSS */
+
+* { /* O asterisco seleciona todos os elementos do HTML de uma vez */
+    margin: 0; /* Zera os espaçamentos externos que os navegadores colocam por padrão */
+    padding: 0; /* Zera os espaçamentos internos padrão */
+    box-sizing: border-box; /* Garante que bordas não aumentem a largura que definirmos para uma caixa */
+}
+
+body { /* Regras para o fundo da página inteira */
+    font-family: 'Poppins', sans-serif; /* Define que todo texto usará a fonte Poppins */
+    background-color: #f5f7fb; /* Pinta o fundo da tela de um cinza-azulado muito claro */
+    color: #2d3436; /* Define a cor principal dos textos como cinza escuro */
+}
+
+header { /* Regras para a barra de topo da página */
+    background: #ffffff; /* Fundo branco para contrastar com a página */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); /* Cria uma sombra levíssima abaixo do cabeçalho */
+    padding: 30px 20px; /* Dá 30 pixels de espaço em cima/baixo e 20 nas laterais internamente */
+    margin-bottom: 40px; /* Empurra os elementos abaixo para ficarem 40px distantes do cabeçalho */
+    text-align: center; /* Centraliza o texto e ícones */
+}
+
+.header-content h1 { /* Regras específicas para o título principal no cabeçalho */
+    font-size: 2.2rem; /* Aumenta o tamanho da letra consideravelmente */
+    color: #2d3436; /* Cor do texto em cinza escuro */
+    font-weight: 600; /* Deixa o texto em negrito (espessura 600) */
+    display: flex; /* Transforma o título num organizador flexível para alinhar ao lado do ícone */
+    align-items: center; /* Centraliza verticalmente o texto com o ícone de satélite */
+    justify-content: center; /* Centraliza o conjunto na horizontal */
+    gap: 15px; /* Define um espaço de 15px entre o ícone e o texto do título */
+}
+
+.header-content h1 i { /* Regras apenas para o ícone de satélite dentro do título */
+    color: #4facfe; /* Pinta o ícone de azul */
+}
+
+.header-content p { /* Subtítulo descritivo no cabeçalho */
+    font-size: 1rem; /* Tamanho normal de leitura */
+    color: #636e72; /* Cinza médio para não chamar tanta atenção quanto o título principal */
+    margin-top: 5px; /* Descola 5px para baixo do título h1 */
+}
+
+.container { /* Caixa invisível que envolve todos os cards e gráficos */
+    max-width: 1200px; /* Trava a largura máxima do site, impedindo que estique muito em monitores grandes */
+    margin: 0 auto; /* O 'auto' nas margens laterais centraliza o contêiner no meio da tela */
+    padding: 0 20px 40px 20px; /* Adiciona espaçamentos internos para o conteúdo não colar nas bordas do monitor */
+}
+
+.dashboard { /* A área que agrupa todos os quadros (cards) */
+    display: grid; /* Usa o sistema de grade do CSS, perfeito para painéis organizados */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Cria colunas dinâmicas que ocupam no mínimo 200px, se ajustando automaticamente ao tamanho da tela */
+    gap: 20px; /* Espaço fixo de 20px entre os cards, como um corredor entre eles */
+    margin-bottom: 40px; /* Empurra o que vier abaixo (o gráfico) 40px para baixo */
+}
+
+.card { /* Regra para cada um dos bloquinhos de temperatura, umidade, etc. */
+    background: #ffffff; /* Fundo branco */
+    border-radius: 16px; /* Arredonda as pontas do quadrado para ficar mais moderno */
+    padding: 20px; /* Preenchimento interno para os textos não colarem na borda */
+    display: flex; /* Organiza o ícone e as informações lado a lado na horizontal */
+    align-items: center; /* Alinha ícone e texto perfeitamente no centro vertical do bloco */
+    gap: 20px; /* Separa o bloco do ícone do bloco do texto em 20px */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02); /* Aplica uma sombra desfocada e transparente */
+    border: 1px solid #f0f0f0; /* Cria uma linha sólida super fina e clara ao redor do quadro */
+    transition: all 0.3s ease; /* Anima qualquer mudança de estado (como passar o mouse) durando 0.3 segundos */
+}
+
+.card:hover { /* O que acontece APENAS quando o mouse passa por cima do card */
+    transform: translateY(-5px); /* Faz o card flutuar 5 pixels para cima */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05); /* Escurece a sombra para enfatizar a flutuação */
+}
+
+.card-icon { /* A caixinha colorida onde os ícones moram */
+    width: 60px; /* Largura fixa da caixinha */
+    height: 60px; /* Altura fixa da caixinha (formando um quadrado) */
+    border-radius: 12px; /* Cantos arredondados, levemente menores que a borda do card pai */
+    display: flex; /* Sistema flex para centralizar o ícone lá dentro */
+    align-items: center; /* Centraliza o ícone no eixo vertical (cima/baixo) */
+    justify-content: center; /* Centraliza o ícone no eixo horizontal (esquerda/direita) */
+    font-size: 1.8rem; /* Aumenta o tamanho do desenho do ícone (termômetro, gota, etc.) */
+}
+
+.card-info h3 { /* O título dentro do card ("Temperatura", "Umidade") */
+    font-size: 0.9rem; /* Fonte um pouco menor */
+    color: #636e72; /* Cor cinza média */
+    font-weight: 500; /* Levemente em negrito */
+    text-transform: uppercase; /* Força todas as letras a ficarem em maiúsculo */
+    letter-spacing: 0.5px; /* Afasta ligeiramente as letras umas das outras */
+}
+
+.card-info .valor { /* O número do sensor (ex: "25.5 °C") */
+    font-size: 1.5rem; /* Número grande para destaque rápido */
+    font-weight: 600; /* Mais espesso */
+    color: #2d3436; /* Cinza bem escuro para facilitar a leitura rápida */
+    margin-top: 4px; /* Separa o número do nome acima dele (Temperatura) */
+}
+
+.grafico-container, .tabela-container { /* Regras compartilhadas pelo bloco do Gráfico e da Tabela */
+    background: #ffffff; /* Fundos brancos em ambas as caixas grandes */
+    border-radius: 16px; /* Bordas arredondadas idênticas aos cards */
+    padding: 30px; /* Bastante respiro interno */
+    margin-bottom: 40px; /* Espaço para afastar elementos abaixo */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02); /* Sombra difusa igual a dos cards */
+    border: 1px solid #f0f0f0; /* Borda fininha de acabamento */
+}
+
+.section-header { /* Divisor dos títulos superiores destas caixas maiores */
+    margin-bottom: 25px; /* Empurra o conteúdo (gráfico ou tabela) 25px para baixo do título */
+}
+
+.section-header h2 { /* Os títulos "Análise no Domínio do Tempo" e "Histórico" */
+    font-size: 1.3rem; /* Tamanho da fonte maior que o texto base */
+    color: #2d3436; /* Cinza escuro */
+    font-weight: 600; /* Negrito médio */
+    display: flex; /* Flexbox para colocar o ícone ao lado do texto */
+    align-items: center; /* Alinha o centro da altura do ícone com a do texto */
+    gap: 10px; /* Distância de 10px entre o ícone e a primeira letra */
+}
+
+.section-header h2 i { /* Regra para o ícone de gráfico ou tabela dentro do h2 */
+    color: #4facfe; /* Mantém a cor base azul do tema do site */
+}
+
+.canvas-wrapper { /* Uma "fôrma" para colocar a tag canvas do gráfico dentro */
+    position: relative; /* Cria uma âncora que obriga o gráfico a não sair dos limites desta caixa */
+    height: 400px; /* Trava a altura máxima do gráfico em 400 pixels para não ocupar a tela toda */
+    width: 100%; /* Faz a caixa usar toda a largura disponível da tela branca */
+}
+
+.table-responsive { /* Container de fora da tabela */
+    overflow-x: auto; /* Se a tela encolher, cria uma barra de rolagem horizontal ao invés de quebrar o layout */
+}
+
+table { /* A tabela do histórico do banco de dados */
+    width: 100%; /* Força a tabela a esticar de ponta a ponta */
+    border-collapse: separate; /* Desgruda as bordas das células umas das outras */
+    border-spacing: 0; /* Zera os espaços extras não intencionais entre as células */
+}
+
+th, td { /* Aplicado em TODOS os campos da tabela, tanto títulos (th) quanto valores normais (td) */
+    padding: 16px; /* Dá 16px de espaço em volta do texto para a tabela não ficar apertada */
+    text-align: left; /* Joga os textos para alinhar à esquerda */
+    border-bottom: 1px solid #f0f0f0; /* Desenha uma linha fina cinza embaixo de CADA linha, separando dados visivelmente */
+}
+
+th { /* Específico para a barra de títulos de colunas no topo da tabela */
+    background-color: #f8fafc; /* Um fundo cinza quase imperceptível para destacar dos dados abaixo */
+    color: #636e72; /* Cor do texto cinza médio */
+    font-weight: 500; /* Letras levemente mais grossas */
+    font-size: 0.95rem; /* Um pouco menores que o texto de corpo normal */
+}
+
+th:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; } /* Arredonda as pontas da primeira célula do topo à esquerda */
+th:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; } /* Arredonda as pontas da última célula do topo à direita */
+
+td { /* Especificidades para os dados reais recuperados do banco */
+    font-size: 0.95rem; /* Tamanho da fonte dos números do clima */
+    color: #2d3436; /* Cinza escuro para melhor legibilidade */
+}
+
+tr:last-child td { /* Seleciona a última linha completa da tabela */
+    border-bottom: none; /* Apaga a linha divisória inferior da última linha para não chocar com a borda do container branco */
+}
+
+tr:hover td { /* Quando o mouse passa em cima de uma linha completa (tr) */
+    background-color: #fcfcfc; /* Muda o fundo da linha inteira para um tom de cinza, criando efeito visual de "marcador de texto" */
+}
+
+.badge { /* Uma classe para criar 'selos' ovais, utilizada na coluna precipitação (sim/não) */
+    padding: 6px 12px; /* Dá respiro ao texto interno do selo */
+    border-radius: 20px; /* Arredonda as pontas quase transformando num círculo alongado */
+    font-size: 0.85rem; /* Texto pequeno */
+    font-weight: 500; /* Levemente em negrito */
+}
+
+.badge-success { /* A cor e tipo de selo para quando tudo está bem (ex: sem chuva) */
+    background-color: #e0f9f8; /* Fundo ciano super clarinho */
+    color: #00cec9; /* Texto ciano forte */
+}
+
+@media (max-width: 768px) { /* Estas regras só são lidas se a tela for menor que 768 pixels (celulares ou tablets em pé) */
+    .dashboard { /* Aquele bloco onde configuramos colunas antes */
+        grid-template-columns: 1fr; /* Quebra as colunas; agora cada card ocupará a largura inteira (1 fração) forçando todos a ficarem empilhados num formato lista vertical */
+    }
+    
+    .canvas-wrapper { /* Aquela caixa restritora da altura do gráfico */
+        height: 300px; /* Reduz de 400px para 300px para o gráfico não engolir toda a tela de um aparelho celular */
+    }
+}

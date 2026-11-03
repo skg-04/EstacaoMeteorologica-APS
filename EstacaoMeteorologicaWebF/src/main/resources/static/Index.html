@@ -1,0 +1,372 @@
+<!DOCTYPE html> <!-- Define que o documento utiliza a versão HTML5 -->
+<html lang="pt-BR"> <!-- Define o idioma principal da página como Português do Brasil -->
+    <head> <!-- Início do cabeçalho da página (configurações invisíveis ao usuário) -->
+        <meta charset="UTF-8"> <!-- Configura a codificação para aceitar acentos e cedilha -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ajusta o zoom e a largura para funcionar bem em celulares -->
+        <title>Estação Meteorológica | Monitoramento</title> <!-- Define o texto que aparece na aba do navegador -->
+
+        <link rel="stylesheet" href="style.css"> <!-- Conecta este HTML ao seu arquivo de estilos CSS -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"> <!-- Baixa a fonte 'Poppins' do Google -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Baixa os ícones (termômetro, vento, etc.) -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Baixa o código pronto do Chart.js para criar o gráfico -->
+    </head> <!-- Fim das configurações -->
+
+    <body> <!-- Início do corpo da página (tudo o que é visível) -->
+        <header> <!-- Início do cabeçalho superior da interface -->
+            <div class="header-content"> <!-- Caixa invisível para agrupar o título e o subtítulo centralizados -->
+                <h1><i class="fa-solid fa-satellite-dish"></i> Estação Meteorológica</h1> <!-- Título principal com um ícone de antena -->
+                <p>Monitoramento de Variáveis Ambientais - APS</p> <!-- Subtítulo descritivo -->
+            </div> <!-- Fim da caixa de agrupamento -->
+        </header> <!-- Fim do cabeçalho superior -->
+
+        <main class="container"> <!-- Conteúdo principal delimitado em uma largura máxima centralizada -->
+
+            <section class="dashboard"> <!-- Seção que agrupa todos os quadros (cards) de variáveis climáticas -->
+
+                <div class="card"> <!-- Início do quadro de Temperatura -->
+                    <div class="card-icon" style="color: #ff6b6b; background: #ffefef;"> <!-- Caixa arredondada vermelha para o ícone -->
+                        <i class="fa-solid fa-temperature-half"></i> <!-- Ícone de termômetro -->
+                    </div> <!-- Fim do ícone -->
+                    <div class="card-info"> <!-- Agrupa os textos do quadro -->
+                        <h3>Temperatura</h3> <!-- Nome da variável -->
+                        <p class="valor" id="temp">-- °C</p> <!-- Valor da temperatura com ID para o JavaScript alterar depois -->
+                    </div> <!-- Fim dos textos -->
+                </div> <!-- Fim do quadro -->
+
+                <div class="card"> <!-- Início do quadro de Umidade -->
+                    <div class="card-icon" style="color: #4facfe; background: #e6f4ff;"> <!-- Caixa azul para o ícone -->
+                        <i class="fa-solid fa-droplet"></i> <!-- Ícone de gota de água -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Umidade</h3> <!-- Nome da variável -->
+                        <p class="valor" id="umidade">-- %</p> <!-- Valor da umidade com ID -->
+                    </div>
+                </div> <!-- Fim do quadro -->
+
+                <div class="card"> <!-- Início do quadro de Precipitação -->
+                    <div class="card-icon" style="color: #6c5ce7; background: #f0eaff;"> <!-- Caixa roxa para o ícone -->
+                        <i class="fa-solid fa-cloud-rain"></i> <!-- Ícone de nuvem com chuva -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Precipitação</h3> <!-- Nome da variável -->
+                        <p class="valor" id="precipitacao">--</p> <!-- Estado da chuva com ID -->
+                    </div>
+                </div> <!-- Fim do quadro -->
+
+                <div class="card"> <!-- Início do quadro de Vento -->
+                    <div class="card-icon" style="color: #00cec9; background: #e0f9f8;"> <!-- Caixa ciano para o ícone -->
+                        <i class="fa-solid fa-wind"></i> <!-- Ícone de vento -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Vento</h3> <!-- Nome da variável -->
+                        <p class="valor" id="vento">-- km/h</p> <!-- Valor do vento com ID -->
+                    </div>
+                </div> <!-- Fim do quadro -->
+
+                <div class="card"> <!-- Início do quadro de Pressão -->
+                    <div class="card-icon" style="color: #fdcb6e; background: #fff9e6;"> <!-- Caixa amarela para o ícone -->
+                        <i class="fa-solid fa-gauge-high"></i> <!-- Ícone de medidor de pressão -->
+                    </div>
+                    <div class="card-info">
+                        <h3>Pressão</h3> <!-- Nome da variável -->
+                        <p class="valor" id="pressao">-- hPa</p> <!-- Valor da pressão com ID -->
+                    </div>
+                </div> <!-- Fim do quadro -->
+            </section> <!-- Fim da seção de quadros -->
+
+            <section class="grafico-container"> <!-- Caixa branca separada para abrigar o gráfico -->
+                <div class="section-header"> <!-- Cabeçalho do bloco do gráfico -->
+                    <h2><i class="fa-solid fa-chart-area"></i> Análise no Domínio do Tempo</h2> <!-- Título do gráfico com ícone -->
+                </div>
+                <div class="canvas-wrapper"> <!-- Envolve o gráfico para impedir que ele ultrapasse a tela -->
+                    <canvas id="graficoTempo"></canvas> <!-- Tela de pintura onde o JavaScript do Chart.js desenhará as linhas -->
+                </div>
+            </section> <!-- Fim da seção do gráfico -->
+
+            <section class="tabela-container"> <!-- Caixa branca separada para abrigar a tabela de histórico -->
+                <div class="section-header"> <!-- Cabeçalho do bloco da tabela -->
+                    <h2><i class="fa-solid fa-table"></i> Histórico de Leituras</h2> <!-- Título da tabela com ícone -->
+                </div>
+                <div class="table-responsive"> <!-- Permite rolagem horizontal na tabela caso a tela do celular seja pequena -->
+                    <table> <!-- Início da tabela HTML -->
+                        <thead> <!-- Define o cabeçalho das colunas da tabela -->
+                            <tr> <!-- Início da linha de títulos -->
+                                <th>Data/Hora</th> <!-- Coluna 1 -->
+                                <th>Temperatura (°C)</th> <!-- Coluna 2 -->
+                                <th>Umidade (%)</th> <!-- Coluna 3 -->
+                                <th>Precipitação</th> <!-- Coluna 4 -->
+                                <th>Vento (km/h)</th> <!-- Coluna 5 -->
+                                <th>Pressão (hPa)</th> <!-- Coluna 6 -->
+                            </tr> <!-- Fim da linha de títulos -->
+                        </thead> <!-- Fim do cabeçalho da tabela -->
+                        <tbody id="tabela-dados"> <!-- Corpo da tabela onde o JavaScript inserirá os dados do banco -->
+                        </tbody> <!-- Fim do corpo da tabela -->
+                    </table> <!-- Fim da tabela HTML -->
+                </div> <!-- Fim da rolagem da tabela -->
+            </section> <!-- Fim da seção da tabela -->
+
+        </main> <!-- Fim do conteúdo principal da página -->
+
+        <script>
+            // Declara a variável global que armazenará a instância do gráfico do Chart.js.
+            // Inicia como null para saber se o gráfico já foi criado anteriormente ou não.
+            let graficoTempo = null;
+
+            // Declara a função assíncrona responsável por buscar e atualizar os dados do dashboard.
+            async function carregarDados() {
+
+                // Imprime uma mensagem informativa no console do navegador indicando o início do processo.
+                console.log("Iniciando busca de dados...");
+
+                // Bloco try-catch para capturar e tratar eventuais erros durante a execução da função.
+                try {
+
+                    // Realiza uma requisição HTTP GET para a rota '/api/dados'.
+                    // Adiciona um parâmetro de timestamp ('?t=...') e 'cache: no-store' para forçar a busca de dados atualizados sem usar a memória cache do navegador.
+                    const resposta = await fetch('/api/dados?t=' + new Date().getTime(), {cache: 'no-store'});
+
+                    // Verifica se a resposta do servidor não foi bem-sucedida (código de status diferente da faixa 200-299).
+                    if (!resposta.ok) {
+
+                        // Exibe uma mensagem de erro no console informando o código de status HTTP retornado.
+                        console.error("Erro HTTP ao buscar dados:", resposta.status);
+
+                        // Interrompe a execução da função para evitar processar dados inválidos.
+                        return;
+
+                    } // Finaliza a verificação de status HTTP.
+
+                    // Converte a resposta em formato JSON para um objeto/matriz JavaScript.
+                    const dados = await resposta.json();
+
+                    // Imprime no console os dados recebidos da API para fins de depuração.
+                    console.log("Dados recebidos da API:", dados);
+
+                    // Verifica se a lista de dados recebida é nula, indefinida ou se está vazia.
+                    if (!dados || dados.length === 0) {
+
+                        // Emite um aviso no console caso o banco não tenha retornado nenhum registro.
+                        console.warn("Nenhum dado retornado da API.");
+
+                        // Interrompe a execução da função.
+                        return;
+
+                    } // Finaliza a verificação de dados vazios.
+
+                    // -------------------------------------------------------------
+                    // 1. ATUALIZAÇÃO DOS CARDS DE DESTAQUE
+                    // -------------------------------------------------------------
+
+                    // Obtém o primeiro elemento da matriz (que representa a leitura mais recente, vinda em ordem decrescente por ID).
+                    const recente = dados[0];
+
+                    // Busca o elemento do HTML responsável por exibir a Temperatura pelo ID 'temp'.
+                    const elemTemp = document.getElementById('temp');
+
+                    // Se o elemento existir na tela, altera o texto interno adicionando o valor da temperatura ou '--' caso indefinido.
+                    if (elemTemp)
+                        elemTemp.innerText = (recente.temperatura !== undefined ? recente.temperatura : '--') + ' °C';
+
+                    // Busca o elemento do HTML responsável por exibir a Umidade pelo ID 'umidade'.
+                    const elemUmid = document.getElementById('umidade');
+
+                    // Se o elemento existir na tela, altera o texto interno adicionando o valor da umidade.
+                    if (elemUmid)
+                        elemUmid.innerText = (recente.umidade !== undefined ? recente.umidade : '--') + ' %';
+
+                    // Busca o elemento do HTML responsável por exibir a Precipitação pelo ID 'precipitacao'.
+                    const elemChuva = document.getElementById('precipitacao');
+
+                    // Se o elemento existir, verifica o valor booleano de precipitacao e exibe 'Sim' ou 'Não'.
+                    if (elemChuva)
+                        elemChuva.innerText = recente.precipitacao ? 'Sim' : 'Não';
+
+                    // Busca o elemento do HTML responsável por exibir o Vento pelo ID 'vento'.
+                    const elemVento = document.getElementById('vento');
+
+                    // Se o elemento existir na tela, exibe o valor da velocidade do vento em km/h.
+                    if (elemVento)
+                        elemVento.innerText = (recente.velocidadeVento !== undefined ? recente.velocidadeVento : '--') + ' km/h';
+
+                    // Busca o elemento do HTML responsável por exibir a Pressão pelo ID 'pressao'.
+                    const elemPressao = document.getElementById('pressao');
+
+                    // Se o elemento existir na tela, exibe o valor da pressão atmosférica em hPa.
+                    if (elemPressao)
+                        elemPressao.innerText = (recente.pressaoAtmosferica !== undefined ? recente.pressaoAtmosferica : '--') + ' hPa';
+
+                    // -------------------------------------------------------------
+                    // 2. ATUALIZAÇÃO DA TABELA DE HISTÓRICO
+                    // -------------------------------------------------------------
+
+                    // Busca o corpo da tabela no HTML pelo ID 'tabela-dados'.
+                    const tabela = document.getElementById('tabela-dados');
+
+                    // Se a tabela for encontrada no HTML, executa a renderização das linhas.
+                    if (tabela) {
+
+                        // Limpa todo o conteúdo HTML anterior da tabela para evitar duplicar dados antigos.
+                        tabela.innerHTML = '';
+
+                        // Percorre cada elemento 'd' presente na matriz de dados retornada pela API.
+                        dados.forEach(function (d) {
+
+                            // Formata a string de dataHora para o padrão de data e hora brasileiro (dd/mm/aaaa hh:mm:ss).
+                            const dataFormatada = d.dataHora ? new Date(d.dataHora).toLocaleString('pt-BR') : '--';
+
+                            // Define qual etiqueta (badge) colorida será exibida na coluna de chuva (amarela para 'Sim' e verde para 'Não').
+                            const badgeChuva = d.precipitacao
+                                    ? '<span class="badge badge-warning">Sim</span>'
+                                    : '<span class="badge badge-success">Não</span>';
+
+                            // Cria um novo elemento HTML de linha de tabela ('tr').
+                            const tr = document.createElement('tr');
+
+                            // Preenche a linha com as células de colunas ('td') contendo os dados formatados da leitura.
+                            tr.innerHTML = '<td>' + dataFormatada + '</td>' +
+                                    '<td>' + (d.temperatura !== undefined ? d.temperatura : '--') + '</td>' +
+                                    '<td>' + (d.umidade !== undefined ? d.umidade : '--') + '</td>' +
+                                    '<td>' + badgeChuva + '</td>' +
+                                    '<td>' + (d.velocidadeVento !== undefined ? d.velocidadeVento : '--') + '</td>' +
+                                    '<td>' + (d.pressaoAtmosferica !== undefined ? d.pressaoAtmosferica : '--') + '</td>';
+
+                            // Adiciona a linha criada dentro do corpo da tabela no HTML.
+                            tabela.appendChild(tr);
+
+                        }); // Finaliza o laço forEach.
+
+                    } // Finaliza a atualização da tabela.
+
+                    // -------------------------------------------------------------
+                    // 3. ATUALIZAÇÃO DO GRÁFICO (CHART.JS)
+                    // -------------------------------------------------------------
+
+                    // Verifica se a biblioteca Chart.js foi carregada com sucesso na página.
+                    if (typeof Chart !== 'undefined') {
+
+                        // Busca o elemento canvas do HTML responsável por pintar o gráfico pelo ID 'graficoTempo'.
+                        const canvas = document.getElementById('graficoTempo');
+
+                        // Se o elemento canvas existir na tela, inicia a construção do gráfico.
+                        if (canvas) {
+
+                            // Obtém o contexto de renderização 2D do canvas.
+                            const ctx = canvas.getContext('2d');
+
+                            // Cria uma cópia da matriz de dados e inverte a ordem para que os horários fiquem em ordem cronológica (do mais antigo para o mais recente).
+                            const dadosOrdenados = dados.slice().reverse();
+
+                            // Mapeia os horários formatados para servirem de texto no eixo X do gráfico.
+                            const labels = dadosOrdenados.map(function (d) {
+                                return d.dataHora ? new Date(d.dataHora).toLocaleTimeString('pt-BR') : '';
+                            });
+
+                            // Extrai apenas os valores numericos de temperatura para compor a primeira linha do gráfico.
+                            const temps = dadosOrdenados.map(function (d) {
+                                return d.temperatura;
+                            });
+
+                            // Extrai apenas os valores numéricos de umidade para compor a segunda linha do gráfico.
+                            const umidades = dadosOrdenados.map(function (d) {
+                                return d.umidade;
+                            });
+
+                            // Cria um gradiente de cor vermelho transparente para o fundo da linha de temperatura.
+                            let gradientTemp = ctx.createLinearGradient(0, 0, 0, 400);
+                            gradientTemp.addColorStop(0, 'rgba(255, 107, 107, 0.5)'); // Cor inicial (topo).
+                            gradientTemp.addColorStop(1, 'rgba(255, 107, 107, 0)');   // Cor final transparente (base).
+
+                            // Cria um gradiente de cor azul transparente para o fundo da linha de umidade.
+                            let gradientUmid = ctx.createLinearGradient(0, 0, 0, 400);
+                            gradientUmid.addColorStop(0, 'rgba(79, 172, 254, 0.5)'); // Cor inicial (topo).
+                            gradientUmid.addColorStop(1, 'rgba(79, 172, 254, 0)');   // Cor final transparente (base).
+
+                            // Se já existir um gráfico criado anteriormente, destrói a instância para evitar sobreposição de linhas e travamentos.
+                            if (graficoTempo) {
+                                graficoTempo.destroy();
+                            }
+
+                            // Instancia um novo gráfico do Chart.js atribuindo à variável 'graficoTempo'.
+                            graficoTempo = new Chart(ctx, {
+                                type: 'line', // Define o gráfico como sendo do tipo linha.
+                                data: {
+                                    labels: labels, // Define os horários do eixo X.
+                                    datasets: [
+                                        {
+                                            label: 'Temperatura (°C)', // Título da primeira linha na legenda.
+                                            data: temps, // Lista de valores de temperatura.
+                                            borderColor: '#ff6b6b', // Cor da linha (vermelha).
+                                            backgroundColor: gradientTemp, // Aplica o gradiente vermelho preenchido.
+                                            borderWidth: 3, // Espessura da linha em pixels.
+                                            pointBackgroundColor: '#fff', // Cor interna do ponto (branca).
+                                            pointBorderColor: '#ff6b6b', // Cor da borda do ponto (vermelha).
+                                            pointBorderWidth: 2, // Espessura da borda do ponto.
+                                            pointRadius: 4, // Tamanho do ponto no gráfico.
+                                            fill: true, // Habilita o preenchimento de cor abaixo da linha.
+                                            tension: 0.4 // Suaviza a curvatura da linha.
+                                        },
+                                        {
+                                            label: 'Umidade (%)', // Título da segunda linha na legenda.
+                                            data: umidades, // Lista de valores de umidade.
+                                            borderColor: '#4facfe', // Cor da linha (azul).
+                                            backgroundColor: gradientUmid, // Aplica o gradiente azul preenchido.
+                                            borderWidth: 3, // Espessura da linha.
+                                            pointBackgroundColor: '#fff', // Cor interna do ponto (branca).
+                                            pointBorderColor: '#4facfe', // Cor da borda do ponto (azul).
+                                            pointBorderWidth: 2, // Espessura da borda do ponto.
+                                            pointRadius: 4, // Tamanho do ponto.
+                                            fill: true, // Habilita o preenchimento abaixo da linha.
+                                            tension: 0.4 // Suaviza a curvatura da linha.
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    responsive: true, // Garante que o gráfico se adapte ao tamanho da tela.
+                                    maintainAspectRatio: false, // Permite ajustar a altura do gráfico livremente via CSS.
+                                    plugins: {
+                                        legend: {
+                                            position: 'top', // Posiciona a legenda no topo do gráfico.
+                                            labels: {font: {family: "'Poppins', sans-serif"}} // Define a fonte Poppins nas legendas.
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: {display: false}, // Oculta as linhas de grade verticais do fundo.
+                                            ticks: {font: {family: "'Poppins', sans-serif"}} // Aplica a fonte nos horários do eixo X.
+                                        },
+                                        y: {
+                                            border: {display: false}, // Oculta a linha lateral principal do eixo Y.
+                                            grid: {color: '#f0f0f0'}, // Define a cor das linhas de grade horizontais.
+                                            ticks: {font: {family: "'Poppins', sans-serif"}} // Aplica a fonte nos números do eixo Y.
+                                        }
+                                    }
+                                }
+                            }); // Finaliza a criação do gráfico Chart.js.
+
+                        } // Finaliza a verificação do canvas.
+
+                    } // Finaliza a verificação da biblioteca Chart.js.
+
+                    // Captura e trata qualquer erro ocorrido durante o ciclo de execução do try.
+                } catch (erro) {
+
+                    // Imprime no console a mensagem detalhada da falha capturada.
+                    console.error("Erro na função carregarDados:", erro);
+
+                } // Finaliza o bloco try-catch.
+
+            } // Finaliza a função carregarDados().
+
+            // Adiciona um ouvinte de evento para disparar as ações assim que a estrutura do documento HTML for completamente carregada.
+            window.addEventListener('DOMContentLoaded', function () {
+
+                // Executa a busca de dados imediatamente na abertura da página.
+                carregarDados();
+
+                // Configura um temporizador para executar a função carregarDados repetidamente a cada 10.000 milissegundos (10 segundos).
+                setInterval(carregarDados, 10000);
+
+            }); // Finaliza o ouvinte de evento DOMContentLoaded.
+        </script>
+    </body> <!-- Finaliza a área visível do site -->
+</html> <!-- Finaliza o documento HTML -->
